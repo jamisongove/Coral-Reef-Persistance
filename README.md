@@ -1,23 +1,36 @@
 # Coral-Reef-Persistence
-Code and data for Gove and Williams et al. (in review)
+This repository is for the reviewers of Gove and Williams et al. (in review)
 
-This is a repository for code and data that are used within Gove and Williams et al. (in review)
+All data and code used within Gove and Williams et al. (in review) are below. 
 
 Software: 
 GAMM_Disturbance.R requires R
 
 All other code requires matlab.
 
-Contents: 
+CONTENTS:
 
-PreDisturbance.m: Runs all analysis on CORAL.PERSISTENCE.RAW.csv that produces Figure 2a,b,c in our submitted manuscript. The output from this script that produces Figure 2c is FIG2c_PERCENT.DIFFERENCES.xlsx
+DATA FILES
 
-Disturbance.m: Runs all analysis on CORAL.PERSISTENCE.RAW.csv that produces the dataset GAMM_MHW.csv. GAMM_MHW.csv is the input for the R script (GAMM_Disturbance.R) that produces the results in Fig. 3d
+CORAL.PERSISTENCE.RAW.csv: Benthic and fish survey data from 2003 - 2019 along with the associated land-sea human impacts and environmental factors for each year from 2000 - 2019 for each reef. This data set is called by numerous scripts below to produce the results presented in Figures 2, 3, and 4. 
 
-PostDisturbance.m: Runs all anayis on CORAL.PERSISTENCE.RAW.csv that produces the data set OLR_REEF.BUILDER.COVER.csv, which is the input for OLR_Probability_Scenario.m
+CORAL.REEF.TRAJETORY.csv: Positive and negative trajectory reefs along with the associated land-sea human impacts and environmental factors presented in Figures 2a,b, and used to calculate percent difference in Figure 2c. 
 
-OLR_Probability_Scenario.m: Takes OLR_REEF.BUILDER.COVER.csv and runs the following: RunOrdinalRegression.m and deltaProbability_2variables. The outputs are the probability matrices for acheiveing HIGH, MODERATE, and LOW reef-builder cover. This also produces figure 4. 
+FIG2c.PERCENT.DIFFERENCE.xlsx: Percent differences used in Figure 2c
 
+GAMM.MHW.csv: : Coral change (percent difference) between 2014/2015 and 2016 along with the associated land-sea human impacts and environmental factors for all reefs used in the GAMM analysis presented in Fig. 3.  
 
-plot_corr_marix.m is called within Predisturbance.m, Disturbance.m, and PostDisturbance.m 
+OLR_REEF.BUILDER.COVER.csv: Total cover of reef-building organisms in 2019 along with the associated land-sea human impacts and environmental factors for all reefs used in the Ordinal Logistic Regression analysis presented in Fig 4. 
+
+CODE
+
+PreDisturbance.m: Runs all analysis on CORAL.PERSISTENCE.RAW.csv that produces Figure 2a,b,c in our submitted manuscript. The output from this script is the data file CORAL.REEF.TRAJECTORY that produces Figures 2a,b,c. See also FIG2c_PERCENT.DIFFERENCES.xlsx which is produced by this script and are the percent differences in Figure 2c. 
+
+Disturbance.m: Runs all analysis on CORAL.PERSISTENCE.RAW.csv that produces the dataset GAMM_MHW.csv. GAMM_MHW.csv is the input for the R script (GAMM_Disturbance.R) that produces the results in Figure 3d and Supplementary Figure 2. 
+
+PostDisturbance.m: Runs all analysis on CORAL.PERSISTENCE.RAW.csv that produces the data set OLR_REEF.BUILDER.COVER.csv, which is the input for OLR_Probability_Scenario.m
+
+OLR_Probability_Scenario.m: Takes OLR_REEF.BUILDER.COVER.csv and runs the following: RunOrdinalRegression.m and deltaProbability_2variables. The outputs are the probability matrices for achieving HIGH, MODERATE, and LOW reef-builder cover. This also produces figure 4. 
+
+plot_corr_matrix.m is called within Predisturbance.m, Disturbance.m, and PostDisturbance.m and produced the correlation matrices show in the supplementary information. 
 
