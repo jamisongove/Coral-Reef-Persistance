@@ -11,23 +11,23 @@ library(tidyverse)
 registerDoMC(12) # WARNING!! defines the number of cores to be used. To know how many cores you can use, use detectCores().
 
 
-### Here, set the path of your working directory. You'll need to rename this
-setwd("~/Documents/jamisongove/EOD/KONA_IEA/PaperI/data/Analysis/Final_Data/Revision/Submission")
+### Here, set the path of your working directory. Rename this to your directory
+setwd("~/Documents/...")
 ### Get the dataset
 data=read.csv('GAMM_MHW.csv',header = T)
 datalist=read.csv('GAMM_MHW.csv',header = T)
 ### Create the matrix of Euclidean distances between locations
-distance_island_matrix=matrix(NA,length(data$Lat),length(data$Lat))   # create the empty matrix in which the distances between islands are going to be recorded
+distance_island_matrix=matrix(NA,length(data$Lat),length(data$Lat))   # create the empty matrix in which the distances between reefs are going to be recorded
 for(isl1 in 1:length(data$Lat)){    
   for(isl2 in isl1:length(data$Lat)){
-    distance_island_matrix[isl1,isl2]=geodist(data$Lat[isl1],data$Long[isl1], data$Lat[isl2],data$Long[isl2], units="km")   # calculate the distance between 2 islands
+    distance_island_matrix[isl1,isl2]=geodist(data$Lat[isl1],data$Long[isl1], data$Lat[isl2],data$Long[isl2], units="km")   # calculate the distance between 2 reefs
   }}
 distance_island_matrix=as.dist(t(distance_island_matrix))   # create a 'dist' type object for hclust to process
 full=hclust(distance_island_matrix,method="complete")   # performs a hierarchical cluster analysis using a set of dissimilarities for the n objects being clustered.
 
 ###############
 nameRV='RelChange' # defines response variable
-h_cut=10      # defines the distance (in km) to form the random factor in the GLMM based on the hierarchical cluster analysis
+h_cut=10      # defines the distance (in km) to form the random factor in the GAMM based on the hierarchical cluster analysis
 ###############
 GROUP=cutree(full, h=h_cut) # cuts the hierarchical clustering analysis tree
 GROUP  <- as.factor(GROUP)
@@ -37,7 +37,7 @@ datalist=cbind(data,GROUP) # column bind the dataset and the previsouly determin
 #################################### Distance v Group Comparision ############################################################################################################
 require(foreach)
 distance_exploration=seq(1,50,length.out=1000)
-results=as.data.frame(foreach(h_cut=distance_exploration,.combine=rbind)%do%{    # defines the distance (in km) to form the random factor in the GLMM based on the hierarchical cluster analysis
+results=as.data.frame(foreach(h_cut=distance_exploration,.combine=rbind)%do%{    # defines the distance (in km) to form the random factor in the GAMM based on the hierarchical cluster analysis
   ###############
   c(h_cut,length(unique(cutree(full, h=h_cut))))
 })
@@ -45,14 +45,10 @@ colnames(results)=c("Distance (km)", "Number of groups")
 plot(results,las=1,type='l',col='red',main='Distance v Groups')
 #############################################################################################################################################################
 
-
-base_k=4
-# Standardizing the predictors 
-#datalist[,4:23]=as.data.frame(apply(datalist[,4:23],2,function(x) (x-mean(x))/sd(x)))  # Be sure to define predictor variables correctly!
-
 ########################################################################################
 ################################## GAMM models #########################################
 ########################################################################################
+base_k=4
 
 # Define the response variables
 colnames(datalist)[1]
@@ -76,20 +72,19 @@ mod<-uGamm(RelChange ~ s(Depth, k = base_k, bs = "cr")  # make sure this list of
            data = datalist, random=~(1|GROUP), family="gaussian", lme4 = T)
  
 # Run all model combinations and output model evaluation metrics
-# m.lim defines the number of predictors that can be included in any single candidate model (here set to 6 to reduce overfitting because of the small response variable replication)
+# m.lim defines the number of predictors that can be included in any single candidate model (here set to 5 to reduce overfitting)
 M.set.ori<-dredge(mod,beta=FALSE, rank="AICc", extra = alist(AIC, "R^2", "adjR^2"), m.lim=c(1,5))
 M.set=as.data.frame(M.set.ori)
 
 ###############################3#################################################################################
 
-# Filter models by a defined Akaike weight (sensu Heenan et al.2016 proc Roy Soc B):
-# AICc delta is <2
+# Filter models by AICc delta <2
 subtab=M.set[which(M.set$delta<=2),]
 subtab
 
 ############################ CUMULATIVE AKAIKE WEIGHT TABLE ############################
 
-###GET TABLE OF TOP (AICc Delta <=2) MODEL RESULTS. CHANGE LINE 116 TO A LARGE NUMBER (E.G. 200) TO GET PREDICOR IMPORTANCE OVER ALL MODELS
+###GET TABLE OF TOP (AICc Delta <=2) MODEL RESULTS. 
 stab <- subtab %>% 
   mutate(across(contains('s('), ~ ifelse(.x=='+' & !is.na(.x), T, F))) %>% 
   rename_with(~sub('s\\(([A-z]*.*), k.*','\\1',.x), contains('s('))
@@ -109,9 +104,7 @@ sapply(varlist, function(v) {
 View(mod_tab)
 ########################## Average across top-ranking models ##########################
 
-#minimum_weight=XXXX  # Change this and below if we are going to use 15% of best model weight. For now using AICc delta <=2
-
-avg=model.avg(get.models(M.set.ori,subset = delta<=2))  # Note if only one top-ranking model then this step is not needed
+avg=model.avg(get.models(M.set.ori,subset = delta<=2)) 
 
 ############################ FITTED FUNCTIONS ############################
 
@@ -144,16 +137,13 @@ plot_pred <- function(model){
   
   plot_frame %>% inner_join(long_data) %>%
     group_by(variable) %>% 
-    #mutate(mm = mean(xx),
-    #      sds = sd(xx),
-    #     x=x*sds + mm) %>%
-    ### Plot a defined fitted function using ggplot   # NOTE if you want to calculate a new fitted function you must re-read lines 92-108 first
+    ### Plot a defined fitted function using ggplot 
     ggplot()+
     geom_line(aes(x = x, y = RelChange), size =2, colour='red') +
     geom_ribbon(aes(x = x, y = RelChange, ymin=lcl,ymax=ucl), alpha=0.3, fill = 'red')+
     geom_point(aes(x = xx, y = Change), color="blue") +
     xlab('')+
-    ylab('Relative Change in CORAL (%)')+
+    ylab('Coral Change(% difference)')+
     coord_cartesian(ylim=c(-95, 15)) +
     theme_bw(base_size=8)+
     facet_wrap(~variable, scales='free_x') + 
