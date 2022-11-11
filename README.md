@@ -30,6 +30,8 @@ PreDisturbance.m: Runs all analysis on CORAL.PERSISTENCE.RAW.csv that produces F
 
 Disturbance.m: Runs all analysis on CORAL.PERSISTENCE.RAW.csv that produces the dataset GAMM_MHW.csv. GAMM_MHW.csv is the input for the R script (GAMM_Disturbance.R) that produces the results in Figure 3d and Supplementary Figure 2. 
 
+GAMM_Disturbance.R: Runs the GAMM analysis used to produce results for Figure 3d and Figure S2. 
+
 PostDisturbance.m: Runs all analysis on CORAL.PERSISTENCE.RAW.csv that produces the data set OLR_REEF.BUILDER.COVER.csv, which is the input for OLR_Probability_Scenario.m
 
 OLR_Probability_Scenario.m: Takes OLR_REEF.BUILDER.COVER.csv and runs the following: RunOrdinalRegression.m and deltaProbability_2variables. The outputs are the probability matrices for achieving HIGH, MODERATE, and LOW reef-builder cover. This also produces figure 4. 
