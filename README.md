@@ -14,9 +14,7 @@ DATA FILES
 
 CORAL.PERSISTENCE.RAW.csv: Benthic and fish survey data from 2003 - 2019 along with the associated land-sea human impacts and environmental factors for each reef for all years from 2000 - 2019. This data set is called by numerous scripts below to produce the results presented in Figures 2, 3, and 4. 
 
-CORAL.REEF.TRAJETORY.csv: Positive and negative trajectory reefs along with the associated land-sea human impacts and environmental factors presented in Figures 2a,b, and used to calculate percent difference in Figure 2c. 
-
-FIG2c.PERCENT.DIFFERENCE.xlsx: Percent differences used in Figure 2c
+CORAL.REEF.TRAJETORY.csv: Positive and negative trajectory reefs along with the associated land-sea human impacts and environmental factors presented in Figures 2a,b,c and used to calculate mean difference in Figure 2d and the percent difference in Extended Data Figure 3. 
 
 GAMM.MHW.csv: Coral change (percent difference) between 2014/2015 and 2016 along with the associated land-sea human impacts and environmental factors for all reefs used in the GAMM analysis presented in Fig. 3.  
 
@@ -26,7 +24,7 @@ HUMAN.IMPACTS_ENVIRONMENTAL.FACTORS_100mGRID.csv: High reslution (100m) data for
 
 CODE
 
-PreDisturbance.m: Runs all analysis on CORAL.PERSISTENCE.RAW.csv that produces Figure 2a,b,c in our submitted manuscript. The output from this script is the data file CORAL.REEF.TRAJECTORY that produces Figures 2a,b,c. See also FIG2c_PERCENT.DIFFERENCES.xlsx which is produced by this script and are the percent differences in Figure 2c. 
+PreDisturbance.m: Runs all analysis on CORAL.PERSISTENCE.RAW.csv that produces Figure 2a,b,d and Extended Data Figure 3 in our submitted manuscript. The output from this script is the data file CORAL.REEF.TRAJECTORY that produces Figures 2a,b,d and Extended Data Figure 3. 
 
 Disturbance.m: Runs all analysis on CORAL.PERSISTENCE.RAW.csv that produces the dataset GAMM_MHW.csv. GAMM_MHW.csv is the input for the R script (GAMM_Disturbance.R) that produces the results in Figure 3d and Supplementary Figure 2. 
 
