@@ -1,9 +1,7 @@
 # Coral-Reef-Persistence
-This repository is for the reviewers of Gove and Williams et al. (in review)
+Data and code repository for Gove and Williams et al. (in review) Integrated land-sea management bolsters coral reefs to climate change
 
-All data and code used within Gove and Williams et al. (in review) are below. 
-
-Software: 
+Software Used:
 GAMM_Disturbance.R requires R
 
 All other code requires matlab.
