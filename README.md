@@ -1,10 +1,9 @@
 # Coral-Reef-Persistence
-Data and code repository for Gove and Williams et al. (in review) Integrated land-sea management bolsters coral reefs to climate change
+Data and code repository for Gove and Williams et al.(2023) Coral reefs benifit from reduced land-sea impacts under ocean warming. Nature
+https://www.nature.com/articles/s41586-023-06394-w
 
 Software Used:
-GAMM_Disturbance.R requires R
-
-All other code requires matlab.
+R and Matlab.
 
 CONTENTS:
 
